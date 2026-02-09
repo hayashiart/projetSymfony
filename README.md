@@ -162,6 +162,4 @@ http://127.0.0.1:8000 (ou le port indiqué)
 
 **Projet réalisé par** : Sébastien Lin  
 **Période** : Février 2026  
-
-Bon courage pour la soutenance !
 ```
