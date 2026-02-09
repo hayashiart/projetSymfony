@@ -1,3 +1,4 @@
+
 # Agenda Événements – Projet Symfony 7  
 **Projet Académique – Framework Symfony**
 
@@ -84,69 +85,83 @@ Permettre aux utilisateurs de créer, modifier, supprimer et lister leurs évén
 
 ## Installation locale (pas à pas)
 
-1. **Cloner le dépôt**  
-   ```bash
-   git clone https://github.com/[tonusername]/agenda-symfony.git
-   cd agenda-symfony
+1. Cloner le dépôt
 
-Installer les dépendancesBashcomposer install
-Configurer la base de données
-Copiez .env en .env.local et modifiez DATABASE_URL selon votre configuration (exemple MySQL) :envDATABASE_URL="mysql://root:Seb12345!@127.0.0.1:3306/evenement_agenda?serverVersion=8.0&charset=utf8mb4"
-Créer et migrer la baseBashphp bin/console doctrine:database:create --if-not-exists
+```bash
+git clone https://github.com/[tonusername]/agenda-symfony.git
+cd agenda-symfony
+```
+
+2. Installer les dépendances
+
+```bash
+composer install
+```
+
+3. Configurer la base de données
+
+Copiez `.env` en `.env.local` et modifiez `DATABASE_URL` selon votre configuration :
+
+```env
+DATABASE_URL="mysql://root:votre-mot-de-passe@127.0.0.1:3306/agenda_symfony?serverVersion=8.0&charset=utf8mb4"
+```
+
+4. Créer et migrer la base
+
+```bash
+php bin/console doctrine:database:create --if-not-exists
 php bin/console doctrine:migrations:migrate --no-interaction
-Charger les fixtures (données de test)Bashphp bin/console doctrine:fixtures:load --no-interaction
-Lancer le serveur SymfonyBashsymfony serve
+```
+
+5. Charger les fixtures (données de test)
+
+```bash
+php bin/console doctrine:fixtures:load --no-interaction
+```
+
+6. Lancer le serveur Symfony
+
+```bash
+symfony serve
 # ou si vous préférez sans https :
 # symfony serve --no-tls
-Accéder à l'applicationhttp://127.0.0.1:8000 (ou le port indiqué)
+```
 
-Comptes de test
+7. Accéder à l'application  
+http://127.0.0.1:8000 (ou le port indiqué)
 
+### Comptes de test
 
+| Rôle       | Email             | Mot de passe | Description                     |
+|------------|-------------------|--------------|---------------------------------|
+| Admin      | admin@agenda.fr   | admin123     | ROLE_ADMIN – gestion complète   |
+| Utilisateur| user@agenda.fr    | user123      | ROLE_USER – événements perso    |
 
+## Difficultés rencontrées & solutions
 
+- Connexion MySQL refusée → installation extension `php8.3-mysql` + correction `DATABASE_URL`  
+- Erreur Twig "controller_name does not exist" → suppression template par défaut  
+- "Access denied" édition → ajout vérification organisateur == user actuel  
+- Routes non trouvées → ajout manuel méthodes + annotations routes  
+- `createdAt` null → correction setter et valeur par défaut  
+- Erreur Intelephense (IDE) → commande `php bin/console cache:clear` + reload window  
 
+## Pistes d'amélioration futures
 
+- Voter Symfony pour gestion fine des permissions  
+- Espace administration complet (liste utilisateurs, modération événements)  
+- Recherche / filtres avancés (titre, dates, lieu)  
+- Upload d’image par événement  
+- Intégration FullCalendar.js (vue calendrier)  
+- Notifications email (Mailjet / Symfony Mailer)  
+- Tests PHPUnit (unitaires + fonctionnels)  
+- Pagination + tris sur les listes d'événements  
+- API REST (futur support application mobile)  
 
+---
 
+**Projet réalisé par** : Sébastien Lin  
+**Période** : Février 2026  
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-RôleEmailMot de passeDescriptionAdminadmin@agenda.fradmin123ROLE_ADMIN – gestion complèteUtilisateuruser@agenda.fruser123ROLE_USER – événements personnels
-Difficultés rencontrées & solutions apportées
-
-Connexion MySQL refusée → installation de l'extension php8.3-mysql + correction de DATABASE_URL
-Erreur Twig "controller_name does not exist" → remplacement du template par défaut
-"Access denied" sur édition → vérification manuelle organisateur == user actuel (puis Voter)
-Routes non trouvées → ajout manuel des méthodes + annotations routes
-createdAt null lors de la création → correction du setter setCreatedAt(?\DateTime $createdAt)
-Erreur autowire Voter → remplacement de Security par AuthorizationCheckerInterface
-Erreur IDE (rouge sur EventRepository) → php bin/console cache:clear + reload window Intelephense
-
-Pistes d'amélioration futures
-
-Voter Symfony pour gestion fine des permissions
-Espace administration complet (liste utilisateurs, modération événements)
-Recherche / filtres avancés (titre, dates, lieu)
-Upload d’image par événement
-Intégration FullCalendar.js (vue calendrier)
-Notifications email (Mailjet / Symfony Mailer)
-Tests PHPUnit (unitaires + fonctionnels)
-Pagination + tris sur les listes d'événements
-API REST (futur support application mobile)
-
-
-Projet réalisé par : Sébastien Lin
-Période : Février 2026
+Bon courage pour la soutenance !
+```
