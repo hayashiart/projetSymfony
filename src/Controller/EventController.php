@@ -52,13 +52,9 @@ public function new(Request $request, EntityManagerInterface $entityManager): Re
 }
 
 #[Route('/evenements/{id}/modifier', name: 'app_event_edit', methods: ['GET', 'POST'])]
-#[IsGranted('ROLE_USER')]
+#[IsGranted(EventOwnerVoter::EDIT, subject: 'event', message: 'Vous n\'êtes pas l\'organisateur de cet événement.')]
 public function edit(Request $request, Event $event, EntityManagerInterface $entityManager): Response
 {
-    if ($event->getOrganizer() !== $this->getUser()) {
-    throw $this->createAccessDeniedException('Vous n\'êtes pas l\'organisateur de cet événement.');
-}
-
     $form = $this->createForm(EventType::class, $event);
     $form->handleRequest($request);
 
@@ -77,14 +73,9 @@ public function edit(Request $request, Event $event, EntityManagerInterface $ent
 }
 
 #[Route('/evenements/{id}', name: 'app_event_delete', methods: ['POST'])]
-#[IsGranted('ROLE_USER')]
+#[IsGranted(EventOwnerVoter::DELETE, subject: 'event', message: 'Vous n\'êtes pas l\'organisateur de cet événement.')]
 public function delete(Request $request, Event $event, EntityManagerInterface $entityManager): Response
 {
-    // Sécurité : seul l'organisateur peut supprimer
-    if ($event->getOrganizer() !== $this->getUser()) {
-        throw $this->createAccessDeniedException('Vous n\'êtes pas l\'organisateur de cet événement.');
-    }
-
     if ($this->isCsrfTokenValid('delete' . $event->getId(), $request->request->get('_token'))) {
         $entityManager->remove($event);
         $entityManager->flush();

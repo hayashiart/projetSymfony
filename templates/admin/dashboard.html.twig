@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de bord Admin{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="mb-4 text-center">Tableau de bord Administration</h1>
+
+        <div class="row mb-5">
+            <div class="col-md-6">
+                <div class="card text-white bg-primary shadow">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Total utilisateurs</h5>
+                        <p class="display-4">{{ totalUsers }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card text-white bg-success shadow">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Total événements</h5>
+                        <p class="display-4">{{ totalEvents }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="mb-4">Liste complète des événements</h2>
+
+        {% if events is empty %}
+            <div class="alert alert-info">Aucun événement dans la base.</div>
+        {% else %}
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Titre</th>
+                        <th>Organisateur</th>
+                        <th>Date début</th>
+                        <th>Lieu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in events %}
+                        <tr>
+                            <td>{{ event.id }}</td>
+                            <td>{{ event.title }}</td>
+                            <td>{{ event.organizer.email }}</td>
+                            <td>{{ event.startDate|date('d/m/Y H:i') }}</td>
+                            <td>{{ event.location ?: 'Non précisé' }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+
+        <div class="text-center mt-4">
+            <a href="{{ path('app_event_index') }}" class="btn btn-secondary btn-lg">
+                Retour à la liste publique
+            </a>
+        </div>
+    </div>
+{% endblock %}
