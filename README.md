@@ -84,20 +84,21 @@ Permettre aux utilisateurs de créer, modifier, supprimer et lister leurs évén
 
 ## Installation locale (pas à pas)
 
-1. Cloner le dépôt  
+1. **Cloner le dépôt**  
    ```bash
    git clone https://github.com/[tonusername]/agenda-symfony.git
    cd agenda-symfony
 
 Installer les dépendancesBashcomposer install
 Configurer la base de données
-Copier .env en .env.local et adapter DATABASE_URL :dotenvDATABASE_URL="mysql://root:Seb12345!@127.0.0.1:3306/evenement_agenda?serverVersion=8.0&charset=utf8mb4"
+Copiez .env en .env.local et modifiez DATABASE_URL selon votre configuration (exemple MySQL) :envDATABASE_URL="mysql://root:Seb12345!@127.0.0.1:3306/evenement_agenda?serverVersion=8.0&charset=utf8mb4"
 Créer et migrer la baseBashphp bin/console doctrine:database:create --if-not-exists
 php bin/console doctrine:migrations:migrate --no-interaction
 Charger les fixtures (données de test)Bashphp bin/console doctrine:fixtures:load --no-interaction
-Lancer le serveurBashsymfony serve --no-tls
-Accéder à l'application
-http://127.0.0.1:8000
+Lancer le serveur SymfonyBashsymfony serve
+# ou si vous préférez sans https :
+# symfony serve --no-tls
+Accéder à l'applicationhttp://127.0.0.1:8000 (ou le port indiqué)
 
 Comptes de test
 
@@ -123,16 +124,16 @@ Comptes de test
 
 
 
-RôleEmailMot de passeDescriptionAdminadmin@agenda.fradmin123ROLE_ADMIN – gestion complèteUtilisateuruser@agenda.fruser123ROLE_USER – événements perso
+RôleEmailMot de passeDescriptionAdminadmin@agenda.fradmin123ROLE_ADMIN – gestion complèteUtilisateuruser@agenda.fruser123ROLE_USER – événements personnels
 Difficultés rencontrées & solutions apportées
 
-Connexion MySQL refusée → installation extension php8.3-mysql + correction DATABASE_URL
+Connexion MySQL refusée → installation de l'extension php8.3-mysql + correction de DATABASE_URL
 Erreur Twig "controller_name does not exist" → remplacement du template par défaut
-"Access denied" sur édition → vérification manuelle organisateur (puis Voter)
-Routes non trouvées → ajout manuel des méthodes + routes
-createdAt null → correction setter setCreatedAt(?\DateTime $createdAt)
-Erreur autowire Voter → remplacement Security par AuthorizationCheckerInterface
-Erreur IDE (rouge sur EventRepository) → clear cache Intelephense + reload window
+"Access denied" sur édition → vérification manuelle organisateur == user actuel (puis Voter)
+Routes non trouvées → ajout manuel des méthodes + annotations routes
+createdAt null lors de la création → correction du setter setCreatedAt(?\DateTime $createdAt)
+Erreur autowire Voter → remplacement de Security par AuthorizationCheckerInterface
+Erreur IDE (rouge sur EventRepository) → php bin/console cache:clear + reload window Intelephense
 
 Pistes d'amélioration futures
 
@@ -149,15 +150,3 @@ API REST (futur support application mobile)
 
 Projet réalisé par : Sébastien Lin
 Période : Février 2026
-Lien GitHub : https://github.com/[tonusername]/agenda-symfony
-Bon courage pour la soutenance !
-text### Instructions pour l’utiliser
-
-1. Remplace `[tonusername]` par ton vrai pseudo GitHub (ex: hayashiart)  
-2. Copie-colle tout dans `README.md`  
-3. Commit et pousse :
-
-```bash
-git add README.md
-git commit -m "README final ultra-détaillé avec captures intégrées"
-git push
